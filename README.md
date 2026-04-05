@@ -9,36 +9,27 @@ A comprehensive implementation of robust estimation and optimization algorithms 
 ### 1. Hough Transform (Voting Method)
 A discretized parameter space voting system for circle detection with a known radius.
 - **Soft Voting**: Uses Gaussian kernels to smooth the accumulator peaks, reducing discretization noise.
-- **Sub-pixel Refinement**: Implements a weighted centroid calculation around the peak to achieve higher precision than the discretization grid.
+- **Sub-pixel Refinement**: Implements a weighted centroid calculation around the peak to achieve higher precision.
+
+![Hough Transform Accumulator](hough_result.png)
 
 ### 2. RANSAC (Random Sample Consensus)
-A robust iterative method to estimate circle parameters in the presence of a high percentage of outliers (up to 40%+).
-- **Model**: (x - x0)^2 + (y - y0)^2 = r^2
-- **Strategy**: Randomly samples minimum points required to define a circle, evaluates inliers within a distance threshold, and selects the model with maximum support.
+A robust iterative method to estimate circle parameters in the presence of a high percentage of outliers.
+- **Strategy**: Randomly samples minimum points required to define a circle (2 points + known radius), evaluates inliers within a distance threshold, and selects the model with maximum support.
+
+![RANSAC Robust Fitting](ransac_result.png)
 
 ### 3. Linear Least Squares (Algebraic Fitting)
 An efficient, closed-form solution that minimizes the algebraic distance. It converts the non-linear circle equation into a linear system:
 x^2 + y^2 + ax + by + c = 0
-Solved using the **Normal Equations** (A^T A x = A^T b).
+This method fits both the **center and the radius** simultaneously.
+
+![Algebraic Least Squares](algebraic_ls_result.png)
 
 ### 4. Radial Least Squares (Geometric Fitting)
-An iterative optimization approach that minimizes the true geometric distance (radial distance) from points to the circle boundary.
-- **Optimization**: Uses the **Jacobian-based Gauss-Newton** or Levenberg-Marquardt approach to refine parameters from a linear initialization.
+An iterative optimization approach (Levenberg-Marquardt) that minimizes the true geometric distance (radial distance) from points to the circle boundary.
+- **Constraint**: This implementation focuses on refining the **center position** for a fixed, known radius.
 
----
-
-## Visual Results
-
-### Hough Transform Accumulator
-The voting space shows the probability distribution of the circle center, where the peak corresponds to the most likely parameters.
-![Hough Transform](hough_result.png)
-
-### RANSAC Robust Fitting
-Demonstrates the ability to ignore significant outlier noise and fit the underlying circle structure.
-![RANSAC](ransac_result.png)
-
-### Iterative Radial Fitting
-Comparison between linear algebraic fitting and the refined geometric (radial) fit.
 ![Radial Least Squares](radial_ls_result.png)
 
 ---
